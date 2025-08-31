@@ -1,101 +1,412 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EB Shop</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-    }
-    header {
-      background: #222;
-      color: #fff;
-      padding: 15px;
-      text-align: center;
-    }
-    nav {
-      background: #444;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .price {
-      color: green;
-      font-weight: bold;
-    }
-    button {
-      margin-top: 10px;
-      padding: 8px 15px;
-      background: #222;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LUDO RAJA – No Login</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#14182a; --muted:#9aa0b3; --good:#27c281;
+    --red:#e63946; --green:#2a9d8f; --blue:#4361ee; --yellow:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b0e1a,#0f1220);color:#eef1ff}
+  .container{max-width:1080px;margin:auto;padding:20px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:22px;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+  .hero{display:grid;gap:18px;grid-template-columns:1.1fr .9fr;align-items:center;margin-top:22px}
+  .brand{padding:26px}
+  h1{margin:0;font-size:48px;letter-spacing:.4px}
+  h1 span:first-child{color:#ffcc00;text-shadow:0 10px 30px rgba(255,204,0,.25)}
+  .sub{color:var(--muted)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+  .btn{padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:#1a1f36;color:#fff;font-weight:700;cursor:pointer}
+  .btn.primary{background:linear-gradient(135deg,#ffcc00,#ff9800);color:#201400}
+  select{padding:10px 12px;border-radius:12px;background:#12162a;color:#fff;border:1px solid rgba(255,255,255,.15)}
+
+  /* Game screen */
+  .grid{display:grid;grid-template-columns:680px 1fr;gap:16px;margin-top:22px}
+  .boardWrap{position:relative;aspect-ratio:1/1;border-radius:18px;overflow:hidden}
+  svg.board{position:absolute;inset:0;width:100%;height:100%}
+  .cell{position:absolute;width:6%;height:6%;transform:translate(-50%,-50%)}
+  .token{position:absolute;width:6%;height:6%;transform:translate(-50%,-50%);border-radius:50%;border:2px solid rgba(0,0,0,.25);box-shadow:0 8px 16px rgba(0,0,0,.35)}
+  .token.red{background:var(--red)} .token.green{background:var(--green)} .token.blue{background:var(--blue)} .token.yellow{background:var(--yellow)}
+  .tokenLabel{position:absolute;transform:translate(-50%,-50%);font-size:10px;font-weight:800;color:#0a0d18}
+  .safeMark{position:absolute;width:3.8%;height:3.8%;transform:translate(-50%,-50%) rotate(45deg);background:#fff;border-radius:4px;border:1px solid rgba(0,0,0,.2)}
+  #side{padding:14px}
+  .die{width:96px;height:96px;border-radius:16px;border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;font-size:36px;background:linear-gradient(180deg,#1b2146,#11162f);user-select:none}
+  .rolling{animation:wiggle .5s linear infinite}
+  @keyframes wiggle{0%{transform:rotate(0)}25%{transform:rotate(8deg)}50%{transform:rotate(0)}75%{transform:rotate(-8deg)}100%{transform:rotate(0)}}
+  .muted{color:var(--muted);font-size:14px}
+  .win{color:var(--good);font-weight:800}
+  #homeScreen{display:block} #gameScreen{display:none}
+</style>
 </head>
 <body>
-
-  <header>
-    <h1>🛒 EB Shop</h1>
-    <p>Organic & Handmade Products</p>
-  </header>
-
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Products</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-  </nav>
-
-  <section class="products">
-    <div class="card">
-      <img src="https://via.placeholder.com/200" alt="Product 1">
-      <h3>Magic Soap</h3>
-      <p class="price">₹199</p>
-      <button>Add to Cart</button>
+<div class="container">
+  <!-- HOME -->
+  <section id="homeScreen" class="hero">
+    <div class="brand card">
+      <h1><span>LUDO</span> RAJA</h1>
+      <p class="sub">No login • Fast play • Winner = चारों गोटियाँ घर</p>
+      <div class="row">
+        <button id="startBtn" class="btn primary">Start Game</button>
+        <label>Players</label>
+        <select id="playerCount"><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+      </div>
+      <p class="muted">Rules: 6 पर open • safe boxes पर kill नहीं • block (दो गोटियाँ साथ) को कोई पार/kill नहीं कर सकता • kill/6 पर extra turn • तीन 6 लगातार = चाल रद्द</p>
     </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/200" alt="Product 2">
-      <h3>Organic Shampoo</h3>
-      <p class="price">₹299</p>
-      <button>Add to Cart</button>
-    </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/200" alt="Product 3">
-      <h3>Herbal Facewash</h3>
-      <p class="price">₹249</p>
-      <button>Add to Cart</button>
+    <div class="card" style="padding:18px;display:grid;place-items:center">
+      <div class="muted">Start दबाते ही पूरा बोर्ड और गेम चालू हो जाएगा.</div>
     </div>
   </section>
 
+  <!-- GAME -->
+  <section id="gameScreen" class="grid">
+    <div class="card" style="padding:10px">
+      <div id="board" class="boardWrap">
+        <!-- SVG Board -->
+        <svg class="board" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="0" y="0" width="50" height="50" fill="#4361ee"/>
+          <rect x="50" y="0" width="50" height="50" fill="#f59e0b"/>
+          <rect x="0" y="50" width="50" height="50" fill="#e63946"/>
+          <rect x="50" y="50" width="50" height="50" fill="#2a9d8f"/>
+          <g fill="#edf1ff">
+            <rect x="44" y="0" width="12" height="44"/>
+            <rect x="56" y="44" width="44" height="12"/>
+            <rect x="44" y="56" width="12" height="44"/>
+            <rect x="0" y="44" width="44" height="12"/>
+          </g>
+          <polygon points="50,34 56,50 50,66 44,50" fill="#fff"/>
+          <circle cx="50" cy="50" r="5" fill="#11162f"/>
+        </svg>
+      </div>
+    </div>
+    <aside id="side" class="card">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+        <div>
+          <div>Turn: <b id="turnText">—</b></div>
+          <div class="muted" id="lastRoll">Dice: —</div>
+        </div>
+        <div style="text-align:center">
+          <div id="dice" class="die btn">🎲</div>
+          <button id="rollBtn" class="btn primary" style="margin-top:6px">Roll</button>
+        </div>
+      </div>
+      <div id="tip" class="muted" style="margin-top:8px">Tip: जिस गोटी को चलाना है, उस पर टैप करें.</div>
+      <div id="win" class="win" style="margin-top:6px"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="newGameBtn" class="btn">New Game</button>
+        <button id="homeBtn" class="btn">Home</button>
+      </div>
+      <div class="muted" style="margin-top:10px">Safe cells ⭐ पर kill नहीं; block ⛔ पार नहीं.</div>
+    </aside>
+  </section>
+</div>
+
+<script>
+/* ----------------- Core Constants ----------------- */
+const COLORS = ["red","green","blue","yellow"];
+const START_INDEX = { red:0, green:13, blue:26, yellow:39 };
+const ENTRY_TO_HOME = { red:50, green:11, blue:24, yellow:37 };
+const SAFE_CELLS = new Set([0,8,13,21,26,34,39,47]); // stars & starts
+const KILL_GRANTS_EXTRA_TURN = true;
+
+/* ----------------- Game State ----------------- */
+const S = {
+  players: [],
+  turnIdx: 0,
+  dice: 0,
+  sixStreak: 0,
+  track: [], // 52 cells ( {x,y}% )
+  home: {red:[],green:[],blue:[],yellow:[]}, // 6 each
+  tokens: {}, // color -> [{pos:'base'|'home'|number, homeLane:false|true}]
+  inPlay: false,
+};
+const $ = s=>document.querySelector(s);
+const board = $("#board");
+const turnText = $("#turnText");
+const lastRoll = $("#lastRoll");
+const win = $("#win");
+const diceEl = $("#dice");
+
+/* ----------------- Build Track ----------------- */
+function buildTrack(){
+  const grid=14, step=100/(grid-1); const ring=[]; for(let i=0;i<grid;i++) ring.push(i*step);
+  const path=[];
+  for(let j=1;j<grid-1;j++) path.push([ring[j], ring[1]]);
+  for(let i=2;i<grid-1;i++) path.push([ring[grid-2], ring[i]]);
+  for(let j=grid-2;j>0;j--) path.push([ring[j], ring[grid-2]]);
+  for(let i=grid-2;i>1;i--) path.push([ring[1], ring[i]]);
+  // add 4 mid-edge nodes to become 52
+  path.splice(0,0,[ring[2], ring[0]+step*0.5]);
+  path.splice(13,0,[ring[grid-1]-step*0.5, ring[2]]);
+  path.splice(26,0,[ring[grid-3], ring[grid-1]-step*0.5]);
+  path.splice(39,0,[ring[0]+step*0.5, ring[grid-3]]);
+  S.track = path.map(([x,y])=>({x,y}));
+
+  // home lanes towards center
+  const cx=50, cy=50; const L=(a,b,t)=>a+(b-a)*t;
+  function lane(fromIdx){
+    const s=S.track[fromIdx]; const arr=[];
+    for(let i=1;i<=6;i++){ const t=i/7; arr.push({x:L(s.x,cx,t), y:L(s.y,cy,t)}); }
+    return arr;
+  }
+  S.home.red = lane(ENTRY_TO_HOME.red);
+  S.home.green = lane(ENTRY_TO_HOME.green);
+  S.home.blue = lane(ENTRY_TO_HOME.blue);
+  S.home.yellow = lane(ENTRY_TO_HOME.yellow);
+
+  mountCellsAndStars();
+}
+
+/* ----------------- Mount click-cells + safe stars ----------------- */
+function mountCellsAndStars(){
+  board.querySelectorAll('.cell,.safeMark,.token,.tokenLabel').forEach(n=>n.remove());
+
+  // track hitboxes
+  S.track.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='cell'; d.style.left=c.x+'%'; d.style.top=c.y+'%'; d.dataset.idx=i;
+    board.appendChild(d);
+  });
+
+  // safe stars
+  SAFE_CELLS.forEach(i=>{
+    const c=S.track[i]; const m=document.createElement('div'); m.className='safeMark'; m.style.left=c.x+'%'; m.style.top=c.y+'%';
+    board.appendChild(m);
+  });
+}
+
+/* ----------------- Tokens ----------------- */
+function spawnTokens(){
+  S.tokens={};
+  S.players.forEach(col=>{
+    S.tokens[col]=[];
+    for(let i=0;i<4;i++) S.tokens[col].push({pos:'base',homeLane:false});
+  });
+  renderTokens();
+}
+function tokenId(c,i){ return `t-${c}-${i}`; }
+function renderTokens(){
+  board.querySelectorAll('.token,.tokenLabel').forEach(n=>n.remove());
+  const baseXY={red:[18,18], green:[82,18], blue:[82,82], yellow:[18,82]};
+  S.players.forEach(col=>{
+    S.tokens[col].forEach((t,i)=>{
+      let x=10,y=10;
+      if(t.pos==='base'){ const off=baseXY[col]; const spread=[[0,0],[7,0],[0,7],[7,7]][i]; x=off[0]+spread[0]; y=off[1]+spread[1]; }
+      else if(t.pos==='home'){ x=50; y=50; }
+      else if(typeof t.pos==='number'){ const p=t.homeLane ? S.home[col][t.pos] : S.track[t.pos]; x=p.x; y=p.y; }
+
+      const el=document.createElement('div'); el.className=`token ${col}`; el.id=tokenId(col,i);
+      el.style.left=x+'%'; el.style.top=y+'%'; el.title=`${col} #${i+1}`;
+      el.addEventListener('click',()=>tryMove(col,i));
+      board.appendChild(el);
+
+      // small count label for stacks
+      const lbl=document.createElement('div'); lbl.className='tokenLabel'; lbl.style.left=x+'%'; lbl.style.top=y+'%';
+      const count = countAtShared(t.pos, col);
+      if(typeof t.pos==='number' && !t.homeLane && count.same>=2) { lbl.textContent=count.same; board.appendChild(lbl); }
+    });
+  });
+}
+
+/* ----------------- Helpers (occupancy & blocks) ----------------- */
+function countAtShared(pos, color){
+  if(typeof pos!=='number') return {same:0, others:0, byColor:{}};
+  const byColor={};
+  S.players.forEach(c=>{
+    byColor[c]=S.tokens[c].filter(t=>typeof t.pos==='number' && !t.homeLane && t.pos===pos).length;
+  });
+  const same = byColor[color]||0;
+  let others=0; S.players.forEach(c=>{ if(c!==color) others += byColor[c]; });
+  return {same, others, byColor};
+}
+function isBlockAt(pos){
+  if(typeof pos!=='number') return false;
+  let blocked=false;
+  S.players.forEach(c=>{
+    const n=S.tokens[c].filter(t=>typeof t.pos==='number' && !t.homeLane && t.pos===pos).length;
+    if(n>=2) blocked=true;
+  });
+  return blocked;
+}
+
+/* ----------------- Turn & Dice ----------------- */
+function current(){ return S.players[S.turnIdx]; }
+function nextTurn(extra=false){
+  if(extra){ /* keep same player */ }
+  else { S.turnIdx=(S.turnIdx+1)%S.players.length; S.sixStreak=0; }
+  $("#turnText").textContent = current().toUpperCase();
+}
+function roll(){
+  if(!S.inPlay) return;
+  diceEl.classList.add('rolling');
+  setTimeout(()=>{
+    diceEl.classList.remove('rolling');
+    S.dice = Math.floor(Math.random()*6)+1;
+    lastRoll.textContent = "Dice: "+S.dice;
+    if(S.dice===6){ S.sixStreak++; } else { S.sixStreak=0; }
+
+    if(S.sixStreak===3){ // penalty
+      lastRoll.textContent += " (तीसरा 6 – चाल रद्द)";
+      S.dice=0; S.sixStreak=0; nextTurn(false); return;
+    }
+
+    const col=current(); const moves = legalMoves(col);
+    if(moves.length===0){ S.dice=0; nextTurn(false); return; }
+    if(moves.length===1){ // auto
+      setTimeout(()=>tryMove(col, moves[0]), 220);
+    } else {
+      $("#tip").textContent="किसी गोटी पर टैप करें (चालें "+moves.length+")";
+    }
+  }, 420);
+}
+
+/* ----------------- Legal move calculation ----------------- */
+function legalMoves(color){
+  const d=S.dice; const arr=[];
+  S.tokens[color].forEach((t,idx)=>{
+    if(t.pos==='home') return;
+    if(t.pos==='base'){ if(d===6) arr.push(idx); return; }
+    const steps = (t.homeLane ? d : d); // same
+    // simulate
+    if(!t.homeLane){
+      const entry=ENTRY_TO_HOME[color];
+      const distToEntry=(entry - t.pos + 52)%52;
+      if(d>distToEntry){ // entering lane
+        const laneSteps=d - distToEntry - 1;
+        if(laneSteps<=6) arr.push(idx);
+      } else {
+        // check blocks in between
+        let p=t.pos;
+        let blocked=false;
+        for(let s=1;s<=d;s++){
+          const mid=(p+s)%52;
+          if(s<d && isBlockAt(mid)) { blocked=true; break; } // cannot pass a block
+        }
+        if(blocked) return;
+        const landing=(t.pos+d)%52;
+        const occ = countAtShared(landing, color);
+        // landing prohibited if enemy block OR enemy on safe cell
+        if(occ.others>=2) return; // enemy block
+        if(occ.others===1 && SAFE_CELLS.has(landing)) return; // safe cell
+        arr.push(idx);
+      }
+    } else { // inside home lane
+      const tgt=t.pos + d;
+      if(tgt<=6) arr.push(idx);
+    }
+  });
+  return arr;
+}
+
+/* ----------------- Apply Move ----------------- */
+function tryMove(color, idx){
+  if(color!==current() || !S.dice) return;
+  const t=S.tokens[color][idx];
+  const d=S.dice;
+  let extra=false, killed=false;
+
+  if(t.pos==='base'){
+    if(d!==6) return;
+    t.pos = START_INDEX[color]; t.homeLane=false;
+    // if landing on enemy single and not safe → kill
+    const occ=countAtShared(t.pos, color);
+    if(occ.others===1 && !SAFE_CELLS.has(t.pos)) { sendOthersToBaseAt(t.pos, color); killed=true; }
+    extra=true; // 6 पर extra
+  } else if(!t.homeLane){
+    const entry=ENTRY_TO_HOME[color];
+    const distToEntry=(entry - t.pos + 52)%52;
+    if(d>distToEntry){ // turn into lane
+      const laneSteps=d - distToEntry - 1;
+      if(laneSteps>6) return;
+      // check if crossing any foreign block before entry
+      for(let s=1;s<=distToEntry;s++){
+        const mid=(t.pos+s)%52;
+        if(isBlockAt(mid)) return;
+      }
+      // entering lane
+      t.homeLane=true; t.pos=laneSteps;
+      if(t.pos===6){ t.pos='home'; }
+    } else {
+      // normal move on ring; if moving a block of same color, move both
+      // ensure not passing foreign blocks
+      for(let s=1;s<=d;s++){
+        const mid=(t.pos+s)%52;
+        if(s<d && isBlockAt(mid)) return;
+      }
+      const landing=(t.pos+d)%52;
+
+      // if landing spot has enemy block or enemy on safe → illegal
+      const occ=countAtShared(landing, color);
+      if(occ.others>=2) return;
+      if(occ.others===1 && SAFE_CELLS.has(landing)) return;
+
+      // if this token is part of our block, move the whole block together
+      const here=countAtShared(t.pos, color);
+      if(here.same>=2){
+        S.tokens[color].forEach(tok=>{
+          if(typeof tok.pos==='number' && !tok.homeLane && tok.pos===t.pos){
+            tok.pos = (tok.pos + d)%52;
+          }
+        });
+      } else {
+        t.pos = landing;
+      }
+
+      // resolve kill (only if exactly one enemy present and not safe)
+      const occAfter=countAtShared(landing, color);
+      if(occAfter.others===1 && !SAFE_CELLS.has(landing)){
+        sendOthersToBaseAt(landing, color); killed=true;
+      }
+    }
+  } else {
+    // inside home lane
+    const tgt=t.pos + d;
+    if(tgt>6) return;
+    t.pos = tgt;
+    if(t.pos===6){ t.pos='home'; }
+  }
+
+  renderTokens();
+  // Win?
+  const done=S.tokens[color].filter(x=>x.pos==='home').length;
+  if(done===4){ win.textContent = `${color.toUpperCase()} WINS – LUDO RAJA 👑`; S.inPlay=false; S.dice=0; return; }
+
+  // next turn logic
+  extra = extra || (d===6) || (killed && KILL_GRANTS_EXTRA_TURN);
+  S.dice=0;
+  if(extra) nextTurn(true); else nextTurn(false);
+}
+
+function sendOthersToBaseAt(pos, moverColor){
+  S.players.forEach(c=>{
+    if(c===moverColor) return;
+    S.tokens[c].forEach(t=>{
+      if(typeof t.pos==='number' && !t.homeLane && t.pos===pos){
+        t.pos='base'; t.homeLane=false;
+      }
+    });
+  });
+}
+
+/* ----------------- Setup / Controls ----------------- */
+function startGame(){
+  const pc=parseInt(document.getElementById('playerCount').value,10);
+  S.players = COLORS.slice(0,pc);
+  S.turnIdx=0; S.dice=0; S.sixStreak=0; S.inPlay=true;
+  win.textContent=""; lastRoll.textContent="Dice: —";
+  buildTrack(); spawnTokens(); renderTokens();
+  $("#homeScreen").style.display='none'; $("#gameScreen").style.display='grid';
+  nextTurn(false);
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('rollBtn').addEventListener('click', roll);
+document.getElementById('dice').addEventListener('click', roll);
+document.getElementById('newGameBtn').addEventListener('click', startGame);
+document.getElementById('homeBtn').addEventListener('click', ()=>{
+  S.inPlay=false; $("#gameScreen").style.display='none'; $("#homeScreen").style.display='block';
+});
+</script>
 </body>
-  </html>
+</html>
